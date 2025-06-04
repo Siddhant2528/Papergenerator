@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Question Paper Generator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 500px;
+            margin-top: 50px; /* Adjusted margin-top for better spacing */
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .checkbox-scroll {
+            width: 100%;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            height: 140px;
+            overflow-y: auto;
+            padding: 10px;
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Question Paper Generator</h2>
+    <form action="/generate" method="POST">
+         <div class="mb-3">
+            <label for="subject" class="form-label">Subject :</label>
+            <select class="form-select" id="subject" name="subject" required>
+                <option value="fxe">FXE</option>
+                <option value="oop">OOP</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="examtype" class="form-label">Exam Type:</label><br>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="examtype" id="insem" value="insem" checked>
+                <label class="form-check-label" for="insem">Insem (30 Marks)</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="examtype" id="endsem" value="endsem">
+                <label class="form-check-label" for="endsem">Endsem (60 Marks)</label>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Select Units (for Insem):</label>
+            <div class="checkbox-scroll">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Unit 1" name="units" id="unit1">
+                    <label class="form-check-label" for="unit1">Unit 1</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Unit 2" name="units" id="unit2">
+                    <label class="form-check-label" for="unit2">Unit 2</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Unit 3" name="units" id="unit3">
+                    <label class="form-check-label" for="unit3">Unit 3</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Unit 4" name="units" id="unit4">
+                    <label class="form-check-label" for="unit4">Unit 4</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Unit 5" name="units" id="unit5">
+                    <label class="form-check-label" for="unit5">Unit 5</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="difficulty" class="form-label">Difficulty:</label>
+            <select class="form-select" id="difficulty" name="difficulty" required>
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="type" class="form-label">Question Type:</label>
+            <select class="form-select" id="type" name="type" required>
+                <option value="theory">Theory</option>
+                <option value="mcq">MCQ</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="setcount" class="form-label">Number of Sets:</label>
+            <input type="number" class="form-control" id="setcount" name="setcount" value="1" min="1" max="5">
+        </div>
+
+        <div class="form-check mb-4">
+            <input class="form-check-input" type="checkbox" name="shuffle" id="shuffle">
+            <label class="form-check-label" for="shuffle">Shuffle Question Order</label>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Generate Question Paper</button>
+    </form>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generated Question Paper</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 800px;
+            margin-top: 50px;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .question-item {
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #fdfdfd;
+            position: relative;
+        }
+        .question-marks {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .or-separator {
+            text-align: center;
+            margin: 10px 0;
+            font-weight: bold;
+            color: #666;
+        }
+        .question-group {
+            margin-bottom: 30px;
+        }
+        .group-title {
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+        .unit-info {
+            color: #666;
+            font-size: 0.9em;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body class="container">
+    <h2>Generated Question Paper {% if examtype == 'endsem' %}(60 Marks){% else %}(30 Marks){% endif %}</h2>
+
+    {% if grouped %}
+    <form action="/download" method="POST">
+        {% for group_id, questions in grouped.items() %}
+            <div class="question-group">
+                {% set unit = questions[0].original_unit if questions else 'Unknown' %}
+
+                {% if examtype == 'endsem' %}
+                    {% if unit in ['Unit 1', 'Unit 2'] %}
+                        <div class="group-title">Q{{ loop.index }}. (Unit {{ unit.split()[-1] }} Questions)</div>
+                        <div class="mt-2">
+                            {% for q in questions %}
+                                <div class="question-item">
+                                    <p><strong>{{ loop.index == 1 and 'A' or 'B' }}]</strong> {{ q.question }}</p>
+                                    <span class="question-marks">[{{ q.marks }} marks]</span>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="group-title">Q{{ loop.index }}. (Unit {{ unit.split()[-1] }} Questions)</div>
+                        <div class="mt-2">
+                            {% set labels = ['A', 'B', 'C', 'D', 'E', 'F'] %}
+                            {% for i in range(0, questions|length, 2) %}
+                                <div class="question-item">
+                                    <p><strong>{{ labels[i] }}]</strong> {{ questions[i].question }}</p>
+                                    <span class="question-marks">[{{ questions[i].marks }} marks]</span>
+                                </div>
+                                <div class="or-separator">OR</div>
+                                <div class="question-item">
+                                    <p><strong>{{ labels[i + 1] }}]</strong> {{ questions[i + 1].question }}</p>
+                                    <span class="question-marks">[{{ questions[i + 1].marks }} marks]</span>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% else %}
+                    {% if questions|length == 2 %}
+                        <div class="group-title">Q{{ loop.index }}. (Compulsory)</div>
+                    {% else %}
+                        <div class="group-title">Q{{ loop.index }}. (Solve Any Two)</div>
+                    {% endif %}
+                    <div class="mt-2">
+                        {% set current_option_set = -1 %}
+                        {% for q in questions %}
+                            {% if current_option_set == -1 %}
+                                {% set current_option_set = q.option_id %}
+                            {% elif q.option_id != current_option_set %}
+                                <div class="or-separator">OR</div>
+                                {% set current_option_set = q.option_id %}
+                            {% endif %}
+                            <div class="question-item">
+                                <p><strong>{{ q.option_id }})</strong> {{ q.question }}</p>
+                                <span class="question-marks">[{{ q.marks }} marks]</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-success btn-lg px-5">Download as PDF</button>
+        </div>
+    </form>
+    {% else %}
+        <div class="alert alert-danger text-center">
+            <h5>No questions available for the selected criteria.</h5>
+            <p>Please try different filters or check if questions exist in the database for your selection.</p>
+        </div>
+    {% endif %}
+
+    <div class="text-center mt-3">
+        <a href="/" class="btn btn-secondary btn-lg px-4">Back to Form</a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Question paper preview loaded successfully');
+        });
+    </script>
+</body>
+</html>
